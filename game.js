@@ -1,5 +1,5 @@
 /**
- * 2D Car Dodging Game - Step 2: Scrolling Road
+ * 2D Car Dodging Game - Step 3: Player Car Movement
  */
 
 const canvas = document.getElementById('gameCanvas');
@@ -27,9 +27,58 @@ const DASH_CYCLE = DASH_LENGTH + DASH_GAP;
 let roadOffset = 0;
 let lastTime = 0;
 
+// Player car setup
+const player = {
+  width: 40,
+  height: 70,
+  x: CANVAS_WIDTH / 2 - 20, // centered on road
+  y: CANVAS_HEIGHT - 90,     // near bottom of road
+  speed: 280,               // pixels per second
+  color: '#06b6d4'          // colored rectangle
+};
+
+// Input handling
+const keys = {
+  left: false,
+  right: false
+};
+
+window.addEventListener('keydown', (e) => {
+  if (e.code === 'ArrowLeft' || e.code === 'KeyA') {
+    keys.left = true;
+    e.preventDefault();
+  } else if (e.code === 'ArrowRight' || e.code === 'KeyD') {
+    keys.right = true;
+    e.preventDefault();
+  }
+});
+
+window.addEventListener('keyup', (e) => {
+  if (e.code === 'ArrowLeft' || e.code === 'KeyA') {
+    keys.left = false;
+  } else if (e.code === 'ArrowRight' || e.code === 'KeyD') {
+    keys.right = false;
+  }
+});
+
 function update(deltaTime) {
   // Continuously scroll the road downward at constant speed
   roadOffset = (roadOffset + ROAD_SPEED * deltaTime) % DASH_CYCLE;
+
+  // Move player left/right with delta time
+  if (keys.left) {
+    player.x -= player.speed * deltaTime;
+  }
+  if (keys.right) {
+    player.x += player.speed * deltaTime;
+  }
+
+  // Clamp player to road edges
+  if (player.x < ROAD_LEFT) {
+    player.x = ROAD_LEFT;
+  } else if (player.x + player.width > ROAD_RIGHT) {
+    player.x = ROAD_RIGHT - player.width;
+  }
 }
 
 function render() {
@@ -59,6 +108,10 @@ function render() {
       ctx.fillRect(lineX, y, 4, DASH_LENGTH);
     }
   }
+
+  // Draw player car (colored rectangle)
+  ctx.fillStyle = player.color;
+  ctx.fillRect(player.x, player.y, player.width, player.height);
 }
 
 function gameLoop(currentTime) {
