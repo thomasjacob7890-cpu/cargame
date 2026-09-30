@@ -41,13 +41,13 @@ body {
 
 #gameCanvas {
   display: block;
-  width: auto;
-  height: auto;
+  width: 400px;
+  height: 600px;
   max-width: 95vw;
-  max-height: 94vh;
-  aspect-ratio: 400 / 650;
-  border-radius: 18px;
-  background-color: #111317;
+  max-height: 95vh;
+  aspect-ratio: 400 / 600;
+  border-radius: 12px;
+  background-color: #111827;
   box-shadow: 
     0 0 0 1px rgba(255, 255, 255, 0.08),
     0 25px 60px -12px rgba(0, 0, 0, 0.8),
